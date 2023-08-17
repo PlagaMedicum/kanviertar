@@ -66,7 +66,6 @@ def main():
     with open('rules.json', 'r') as rules_file:
         rule_data = json.load(rules_file)
         RULES = [Rule(**rule) for rule in rule_data]
-    print(RULES)
 
     new_text = text
 
