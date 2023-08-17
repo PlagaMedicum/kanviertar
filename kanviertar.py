@@ -1,4 +1,8 @@
 import re
+import json
+from collections import namedtuple
+
+Rule = namedtuple('Rule', ['search_str', 'replace_str', 'ask_flag'])
 
 def highlight_text(text):
     """
@@ -59,22 +63,10 @@ def main():
     except KeyboardInterrupt:
         print('\nКарыстальнік перапыніў аперыцыю.')
 
-    RULES = (
-        (r'(?<=[нсцзвплмб])ь(?=[нсцзвплмб])', '', None),
-        (r'(?i)(?<=д)зь(?=дз)', '', None),
-        (r'(?i)(?<=д)з(?=[фпсткх])', 'с', None),
-        ('ґ', 'г', None),
-        (r'(?<=[зсцбпркншфвлджчмтчхг])\'', '’', True),
-        (r'ь(?=[яеюёі])', '’', True),
-        (r'(?i)(?<=м)э(?=ды)', 'е', None),
-        (r'(?i)(?<=рас)е(?=[йяію])', 'і', None),
-        (r'(?i)(?<=імп)э(?=р)', 'е', None),
-        (r'(?i)(?<=м)э(?=тал)', 'е', None),
-        (r'(?i)(?<=м)е(?=нск)', 'і', None),
-        (r'(?i)(?<=г)ара(?=дзенск)', 'ро', None),
-        (r'(?i)(?<=в)э(?=нт)', 'е', None),
-        (r'(?i)(?<=пл)я(?=ст)', 'а', None)
-    )
+    with open('rules.json', 'r') as rules_file:
+        rule_data = json.load(rules_file)
+        RULES = [Rule(**rule) for rule in rule_data]
+    print(RULES)
 
     new_text = text
 
