@@ -1,4 +1,5 @@
 import re
+from html import escape
 from PyQt5.QtWidgets import QMessageBox
 
 CONTEXT_SHIFT = 40  # Adjust this value as needed
@@ -46,6 +47,9 @@ def apply_rule(text, rule, match, main_window):
     return text
 
 def apply_all_rules(text, rules, main_window):
+    # Escape HTML-like tags to prevent truncation
+    text = escape(text)
+
     # Convert newline characters to HTML line breaks
     text = text.replace('\n', '<br>')
 

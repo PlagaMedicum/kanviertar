@@ -41,8 +41,9 @@
 
     {"search_str": "(?i)(?<=прылад)аў(?=\\b)", "replace_str": "прылад", "ask_flag": null},
 
-    {"search_str": "(?<=[нсцзвплмб])ь(?=[нцзвплмб])", "replace_str": "", "ask_flag": null},
+    {"search_str": "(?<=[нсцзвплмб])ь(?=[цзпл][еёіьюя])", "replace_str": "", "ask_flag": null},
+    {"search_str": "(?<=[нсцзвплмб])ь(?=[сбвмн][еёіьюя])", "replace_str": "", "ask_flag": true},
     {"search_str": "(?i)(?<=д)зь(?=дз)", "replace_str": "", "ask_flag": null},
-    {"search_str": "ь(?=[яеюёі])", "replace_str": "’", "ask_flag": true}
+    {"search_str": "ь(?=[еёіюя])", "replace_str": "’", "ask_flag": true}
 ]
 
