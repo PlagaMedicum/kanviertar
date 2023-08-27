@@ -6,7 +6,7 @@ from text_processing import update_text, apply_all_rules
 class ConfirmationDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Пацверджанне замены")
+        self.setWindowTitle("Пацвярджэнне замены")
         self.setFixedSize(600, 400)
 
         self.question_label = QLabel()
