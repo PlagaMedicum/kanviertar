@@ -18,6 +18,7 @@
     {"search_str": "(?i)(?<=л)я(?=гіч)", "replace_str": "а", "ask_flag": true},
     {"search_str": "(?i)(?<=м)э(?=д)", "replace_str": "е", "ask_flag": true},
     {"search_str": "(?i)(?<=м)э(?=тал)", "replace_str": "е", "ask_flag": null},
+    {"search_str": "(?i)(?<=н)э(?=рат)", "replace_str": "е", "ask_flag": null},
     {"search_str": "(?i)(?<=пл)я(?=ст)", "replace_str": "а", "ask_flag": null},
     {"search_str": "(?i)(?<=праф)э(?=с)", "replace_str": "е", "ask_flag": null},
     {"search_str": "(?i)(?<=сф)э(?=р)", "replace_str": "е", "ask_flag": true},
