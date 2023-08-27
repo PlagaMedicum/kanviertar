@@ -2,10 +2,6 @@
     {"search_str": "ґ", "replace_str": "г", "ask_flag": null},
     {"search_str": "(?i)(?<=д)з(?=[фпсткх])", "replace_str": "с", "ask_flag": null},
 
-    {"search_str": "(?<=[нсцзвплмб])ь(?=[нсцзвплмб])", "replace_str": "", "ask_flag": null},
-    {"search_str": "(?i)(?<=д)зь(?=дз)", "replace_str": "", "ask_flag": null},
-    {"search_str": "ь(?=[яеюёі])", "replace_str": "’", "ask_flag": true},
-
     {"search_str": "(?<=[зсцбпркншфвлджчмтчхг])'", "replace_str": "’", "ask_flag": true},
 
     {"search_str": "(?i)(?<=н)э(?=нт)", "replace_str": "е", "ask_flag": true},
@@ -14,6 +10,8 @@
     {"search_str": "(?i)барб(?=ар)", "replace_str": "варв", "ask_flag": null},
     {"search_str": "(?i)(?<=в)э(?=нт)", "replace_str": "е", "ask_flag": null},
     {"search_str": "(?i)(?<=імп)э(?=р)", "replace_str": "е", "ask_flag": null},
+    {"search_str": "(?i)(?<=кл)я(?=с)", "replace_str": "а", "ask_flag": null},
+    {"search_str": "(?i)(?<=c)ы(?=чн)", "replace_str": "і", "ask_flag": true},
     {"search_str": "(?i)(?<=л)ё(?=гік)", "replace_str": "о", "ask_flag": true},
     {"search_str": "(?i)(?<=л)я(?=гіч)", "replace_str": "а", "ask_flag": true},
     {"search_str": "(?i)(?<=м)э(?=д)", "replace_str": "е", "ask_flag": true},
@@ -41,6 +39,10 @@
     {"search_str": "(?i)(?<=\\bб)я(?=зь\\b)", "replace_str": "е", "ask_flag": null},
     {"search_str": "(?i)(?<=\\bн)я(?=\\b)", "replace_str": "е", "ask_flag": null},
 
-    {"search_str": "(?i)(?<=прылад)аў(?=\\b)", "replace_str": "прылад", "ask_flag": null}
+    {"search_str": "(?i)(?<=прылад)аў(?=\\b)", "replace_str": "прылад", "ask_flag": null},
+
+    {"search_str": "(?<=[нсцзвплмб])ь(?=[нцзвплмб])", "replace_str": "", "ask_flag": null},
+    {"search_str": "(?i)(?<=д)зь(?=дз)", "replace_str": "", "ask_flag": null},
+    {"search_str": "ь(?=[яеюёі])", "replace_str": "’", "ask_flag": true}
 ]
 
