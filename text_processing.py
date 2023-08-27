@@ -49,6 +49,12 @@ def apply_all_rules(text, rules, main_window):
     # Convert newline characters to HTML line breaks
     text = text.replace('\n', '<br>')
 
+    # Convert tabs to HTML entities only if not within HTML tags
+    def replace_tab(match):
+        return '&#09;' if not re.search(r'<[^>]*$', match.group(0)) else '\t'
+
+    text = re.sub(r'\t+', replace_tab, text)
+
     for rule in rules:
         rule_tr = (rule.search_str, rule.replace_str)
         if rule.ask_flag is None:

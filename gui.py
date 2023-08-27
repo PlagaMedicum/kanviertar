@@ -1,7 +1,8 @@
 import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTextEdit, QPushButton, QVBoxLayout, QWidget, QDialog, QLabel, QMessageBox
-from text_processing import update_text, apply_all_rules
+from PyQt5.QtGui import QTextDocument
+from text_processing import apply_all_rules
 
 class ConfirmationDialog(QDialog):
     def __init__(self, parent=None):
@@ -42,6 +43,11 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Канвертар')
 
         self.text_edit = QTextEdit()
+
+        # Set tab stop width to ensure proper rendering of tabs
+        tab_stop_width = 30
+        self.text_edit.setTabStopWidth(tab_stop_width)
+
         self.convert_button = QPushButton('Канвертаваць')
         self.convert_button.clicked.connect(self.convert_text)
 
@@ -55,9 +61,11 @@ class MainWindow(QMainWindow):
 
     def convert_text(self):
         text = self.text_edit.toPlainText()
-        new_text = apply_all_rules(text, self.rules, self)  # Pass self as an argument
+        new_text = apply_all_rules(text, self.rules, self)
 
-        self.text_edit.setHtml(new_text)  # Set as HTML to show highlighted text
+        # Wrap the text in a <pre> element with a CSS style for tabs
+        new_text_display = f'<pre style="white-space: pre-wrap; tab-size: 4;">{new_text}</pre>'
+        self.text_edit.setHtml(new_text_display)
 
     def show_confirmation_dialog(self, question, old_text, new_text):
         dialog = ConfirmationDialog(self)
