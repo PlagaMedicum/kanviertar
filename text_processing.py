@@ -29,11 +29,16 @@ def apply_rule(text, rule, match, main_window):
     start, end = match.span()
     segment = match.group()
     ctx_start = max(0, start - CONTEXT_SHIFT)
-    word_start = text.rfind(' ', ctx_start, start)+1
-    word_end = text.rfind(' ', end, end+CONTEXT_SHIFT)-1
-    ctx = text[ctx_start:start] + segment + text[end:end+CONTEXT_SHIFT]
+    word_start = text.rfind(' ', ctx_start, start) + 1
+    word_end = text.rfind(' ', end, end + CONTEXT_SHIFT) - 1
+    ctx = text[ctx_start:start] + segment + text[end:end + CONTEXT_SHIFT]
+    ctx_hl = (
+        text[ctx_start:start]
+        + f'<span style="color:red">{segment}</span>'
+        + text[end:end + CONTEXT_SHIFT]
+    )
 
-    if main_window.show_confirmation_dialog("Пацвердзіць замену?", ctx, update_text(ctx, rule)):
+    if main_window.show_confirmation_dialog("Пацвердзіць замену?", ctx_hl, update_text(ctx, rule)):
         text = text[:word_start] + update_text(text[word_start:word_end], (search_str, replace_str)) + text[word_end:]
     else:
         print(f"User declined. {ctx}")
@@ -41,6 +46,9 @@ def apply_rule(text, rule, match, main_window):
     return text
 
 def apply_all_rules(text, rules, main_window):
+    # Convert newline characters to HTML line breaks
+    text = text.replace('\n', '<br>')
+
     for rule in rules:
         rule_tr = (rule.search_str, rule.replace_str)
         if rule.ask_flag is None:

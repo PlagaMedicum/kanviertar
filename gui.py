@@ -1,4 +1,5 @@
 import sys
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTextEdit, QPushButton, QVBoxLayout, QWidget, QDialog, QLabel, QMessageBox
 from text_processing import update_text, apply_all_rules
 
@@ -27,8 +28,8 @@ class ConfirmationDialog(QDialog):
 
     def set_question_and_context(self, question, old_text, new_text):
         self.question_label.setText(question)
-        self.old_text_label.setText(f"Стары тэкст:\n{old_text}")
-        self.new_text_label.setText(f"Новы тэкст:\n{new_text}")
+        self.old_text_label.setText(old_text)
+        self.new_text_label.setText(new_text)
 
 class MainWindow(QMainWindow):
     def __init__(self, rules):
