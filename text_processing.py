@@ -1,8 +1,8 @@
 import re
 from html import escape
-from PyQt5.QtWidgets import QMessageBox
 
-CONTEXT_SHIFT = 40  # Adjust this value as needed
+CONTEXT_SHIFT = 60
+WORD_SHIFT = 5
 
 def replace_char(match, replace):
     """
@@ -17,6 +17,16 @@ def replace_char(match, replace):
     """
     return (replace, replace.upper())[match.group(0).isupper()]
 
+def find_word_boundaries(text, position):
+    # Use regular expressions to find the word boundaries
+    pattern = r'\W*[\b]\w+[\b]'
+    matches = re.finditer(pattern, text)
+    for match in matches:
+        start, end = match.span()
+        if start <= position <= end:
+            return start, end
+    return None, None
+
 def update_text(text, rule):
     search_str, replace_str = rule
     EXCEPTIONS = ('', '’')
@@ -30,19 +40,28 @@ def apply_rule(text, rule, match, main_window):
     start, end = match.span()
     segment = match.group()
     ctx_start = max(0, start - CONTEXT_SHIFT)
-    word_start = text.rfind(' ', ctx_start, start) + 1
-    word_end = text.rfind(' ', end, end + CONTEXT_SHIFT) - 1
-    ctx = text[ctx_start:start] + segment + text[end:end + CONTEXT_SHIFT]
-    ctx_hl = (
-        text[ctx_start:start]
-        + f'<span style="color:red">{segment}</span>'
-        + text[end:end + CONTEXT_SHIFT]
-    )
+    ctx_end = end + CONTEXT_SHIFT
+    ctx = text[ctx_start:start] + segment + text[end:ctx_end]
 
-    if main_window.show_confirmation_dialog("Пацвердзіць замену?", ctx_hl, update_text(ctx, rule)):
-        text = text[:word_start] + update_text(text[word_start:word_end], (search_str, replace_str)) + text[word_end:]
-    else:
-        print(f"User declined. {ctx}")
+    # Find the word boundaries
+    word_start, word_end = find_word_boundaries(text, start)
+    if word_start is None:
+        word_start = max(0, start - WORD_SHIFT)
+    if word_end is None:
+        word_end = end + WORD_SHIFT
+
+    ctx_hl = (
+        text[ctx_start:word_start]
+        + f'<span style="color:yellow">{text[word_start:start]}</span>'
+        + f'<span style="color:red">{segment}</span>'
+        + f'<span style="color:yellow">{text[end:word_end]}</span>'
+        + text[word_end:ctx_end]
+    )
+    if segment in text[word_start:word_end]:
+        if main_window.show_confirmation_dialog("Пацвердзіць замену?\nКалі вы бачыце штосьці ненармальнае, то вам здаецца ;)", ctx_hl, text[ctx_start:start] + update_text(text[start:end], rule) + text[end:ctx_end]):
+            text = text[:word_start] + update_text(text[word_start:word_end], rule) + text[word_end:]
+        else:
+            print(f"User declined. {ctx}")
 
     return text
 
@@ -64,8 +83,8 @@ def apply_all_rules(text, rules, main_window):
         if rule.ask_flag is None:
             text = update_text(text, rule_tr)
             continue
-        matches = list(re.finditer(rule.search_str, text, flags=re.IGNORECASE))
-        for match in reversed(matches):
+        matches = re.finditer(rule.search_str, text, flags=re.IGNORECASE)
+        for match in matches:
             text = apply_rule(text, rule_tr, match, main_window)
 
     return text

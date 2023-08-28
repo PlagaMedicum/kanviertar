@@ -4,6 +4,9 @@ from collections import namedtuple
 
 Rule = namedtuple('Rule', ['search_str', 'replace_str', 'ask_flag'])
 
+CONTEXT_SHIFT = 40
+WORD_SHIFT = 5
+
 def highlight_text(text):
     """
     Highlights a given text using ANSI escape codes for red text.
@@ -23,6 +26,16 @@ def replace_char(match, replace):
     """
     return (replace, replace.upper())[match.group(0).isupper()]
 
+def find_word_boundaries(text, position):
+    # Use regular expressions to find the word boundaries
+    pattern = r'\W*[\b]\w+[\b]'
+    matches = re.finditer(pattern, text)
+    for match in matches:
+        start, end = match.span()
+        if start <= position <= end:
+            return start, end
+    return None, None
+
 def update_text(text, rule):
     search_str, replace_str = rule
     EXCEPTIONS = ('', '’')
@@ -39,11 +52,17 @@ def apply_rule(text, rule):
     for match in re.finditer(search_str, text, flags=re.IGNORECASE):
         start, end = match.span()
         segment = match.group()
-        SHIFT = 40
-        ctx_start = max(0, start - SHIFT)
-        word_start = text.rfind(' ', ctx_start, start)+1
-        word_end = text.rfind(' ', end, end+SHIFT)-1
-        ctx = text[ctx_start:start] + highlight_text(segment) + text[end:end+SHIFT]
+        ctx_start = max(0, start - CONTEXT_SHIFT)
+        ctx_end = end + CONTEXT_SHIFT
+        ctx = text[ctx_start:start] + segment + text[end:ctx_end]
+
+        # Find the word boundaries
+        word_start, word_end = find_word_boundaries(text, start)
+        if word_start is None:
+            word_start = max(0, start - WORD_SHIFT)
+        if word_end is None:
+            word_end = end + WORD_SHIFT
+
         prompt = f"> Пацвердзіць замену?\n{ctx}\nБудзе заменена на: {replace_str}\n(н/не/n/nie/no, каб адхіліць замену): "
         try:
             response = input(prompt).strip().lower()
