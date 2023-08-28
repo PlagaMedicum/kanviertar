@@ -82,7 +82,6 @@ class MainWindow(QMainWindow):
         dialog = ConfirmationDialog(self)
         dialog.set_question_and_context(question, old_text, new_text)
         result = dialog.exec_()
-        print(f"Confirmation dialog result: {result}; returning {result == QDialog.Accepted}")
         return result == QDialog.Accepted
 
 def run_gui(rules):

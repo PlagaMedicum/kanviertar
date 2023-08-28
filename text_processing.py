@@ -3,6 +3,7 @@ from html import escape
 
 CONTEXT_SHIFT = 60
 WORD_SHIFT = 5
+QUESTION_PROMPT = "Пацвердзіць замену?\n[[[ Калі вы бачыце штосьці ненармальнае, то вам здаецца ;) ]]]"
 
 def replace_char(match, replace):
     """
@@ -57,8 +58,15 @@ def apply_rule(text, rule, match, main_window):
         + f'<span style="color:yellow">{text[end:word_end]}</span>'
         + text[word_end:ctx_end]
     )
+
+    replace_hl = (
+        text[ctx_start:word_start]
+        + f'<span style="color:green">{update_text(text[word_start:word_end], rule)}</span>'
+        + text[word_end:ctx_end]
+    )
+
     if segment in text[word_start:word_end]:
-        if main_window.show_confirmation_dialog("Пацвердзіць замену?\nКалі вы бачыце штосьці ненармальнае, то вам здаецца ;)", ctx_hl, text[ctx_start:start] + update_text(text[start:end], rule) + text[end:ctx_end]):
+        if main_window.show_confirmation_dialog(QUESTION_PROMPT, ctx_hl, replace_hl):
             text = text[:word_start] + update_text(text[word_start:word_end], rule) + text[word_end:]
         else:
             print(f"User declined. {ctx}")
